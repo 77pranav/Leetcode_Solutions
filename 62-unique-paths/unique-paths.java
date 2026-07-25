@@ -1,7 +1,8 @@
 class Solution {
     public int uniquePaths(int m, int n) {
     //    return recursionMemo(m,n,new Integer[m+1][n+1]);
-        return tabulation(m,n); 
+        // return tabulation(m,n); 
+        return spaceOptimized(m,n);
     }
     public int recursion(int m,int n){
         if(m<=1 && n<=1) return 1;
@@ -29,5 +30,20 @@ class Solution {
             }
         }
         return dp[m-1][n-1];
+    }
+    public int spaceOptimized(int m,int n){
+        int last=1;
+        int[] col=new int[n];
+        Arrays.fill(col,1);
+        for(int i=1;i<m;i++){
+            int[] row=new int[m];
+            Arrays.fill(row,1);
+            for(int j=1;j<n;j++){
+                last=row[i]+col[j];
+                col[j]=last;
+                row[i]=last;
+            }
+        }
+        return last;
     }
 }
