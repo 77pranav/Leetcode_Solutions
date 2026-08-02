@@ -1,7 +1,8 @@
 class Solution {
     public int coinChange(int[] coins, int amount) {
         int n=coins.length;
-        return recursionMemo(coins,amount,new Integer[amount+1]);
+        // return recursionMemo(coins,amount,new Integer[amount+1]);
+        return tabulation(coins,amount);
     }
     public int recursion(int[] coins, int amount){
         if(amount==0){
@@ -39,5 +40,27 @@ class Solution {
             ans=Math.min(ans,count);
         }
         return dp[amount]=(ans==Integer.MAX_VALUE)?-1:ans;
+    }
+    public int tabulation(int[] coins,int amount){
+        if(amount==0) return 0;
+        int n=coins.length;
+        int[] dp=new int[amount+1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        for(int i=1;i<=amount;i++){
+            for(int j=0;j<n;j++){
+                int amt=-1;
+                if(coins[j]==i){
+                    amt=1;
+                }else if(coins[j]<i){
+                    if(dp[i-coins[j]]!=Integer.MAX_VALUE){
+                        amt=1+dp[i-coins[j]];
+                    }
+                }
+                if(amt!=-1){
+                    dp[i]=Math.min(dp[i],amt);
+                }
+            }
+        }
+        return dp[amount]==Integer.MAX_VALUE?-1:dp[amount];
     }
 }
