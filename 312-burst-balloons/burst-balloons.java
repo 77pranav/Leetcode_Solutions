@@ -11,7 +11,8 @@ class Solution {
             }
         }
         // return recursion(bound_nums,1,n);
-        return recursion_memo(bound_nums,1,n,new Integer[m][m]);
+        // return recursion_memo(bound_nums,1,n,new Integer[m][m]);
+        return tabulation(bound_nums);
     }
     public int recursion(int[] nums,int i,int j){
         if(i>j) return 0;
@@ -35,5 +36,20 @@ class Solution {
             ans=Math.max(ans,left+right+coins);
         }
         return dp[i][j]=ans;
+    }
+    public int tabulation(int[] nums){
+        int n=nums.length;
+        int[][] dp=new int[n][n];
+        for(int col=1;col<n-1;col++){
+            for(int row=col;row>=1;row--){
+                int ans=0;
+                for(int index=row;index<=col;index++){
+                    int coin=nums[index]*nums[row-1]*nums[col+1];
+                    ans=Math.max(ans,coin+dp[row][index-1]+dp[index+1][col]);
+                }
+                dp[row][col]=ans;
+            }
+        }
+        return dp[1][n-2];
     }
 }
